@@ -3,6 +3,8 @@ const http = require("http");
 const hostname = "127.0.0.1";
 const port = 3000;
 
+let array = ["hi"];
+
 
 const server = http.createServer();
 
@@ -15,6 +17,7 @@ function request_Handler(request, response){
     console.log(`Requesting for: ` + url);
     if(url === "/"){
         const html = fs.createReadStream("index.html");
+        html.append("hi");
         response.writeHead(200, {"Content-Type": "text/html"});
         html.pipe(response);
     }else if(url === "/favicon.ico"){
@@ -29,19 +32,14 @@ function request_Handler(request, response){
         const html = fs.createReadStream("resources/style/style.css");
         response.writeHead(200, {"Content-Type": "application/javascript"});
         html.pipe(response);
-    }
-    else{
+    }else{
+
+        array.push(url);
         console.log("page not found");
+        console.log(array);
     }
 }
 
-
-
-function stream_to_message(stream, callback){
-	let body = "";
-	stream.on('data', (chunk) => body += chunk);
-	stream.on('end', () => callback(body));
-}
 
 function listen_Handler(){
     console.log(`Listening on port ${port}`)
